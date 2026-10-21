@@ -136,6 +136,19 @@ BIS-specific lessons:
   ⚠️ The panel's OPTIONS UI is buggy — clicks throw `Cannot read properties of undefined
   (reading 'query')` and nothing saves; configure panels via `PATCH /panels/{id}` instead
   (see `scripts/build_bis_heatmap.py` for the working options JSON).
+- **`field` (metric) must be a real numeric field** — undefined `field` → `split` crash;
+  nonexistent name → intensity falls back to 1 but legend/popup look wrong. BIS added
+  `severity`(blotter 1–5), `risk_score`(households), `vulnerability_score`(residents).
+- **Extension update pipeline (LikhaCMS-2)**: edit `backend/extensions/<name>/src/*` →
+  `npm run build` in that dir (or `npm run backend:build:all:extensions` at repo root) →
+  push → on server `git pull` + `docker compose build backend && up -d backend`
+  (backend.Dockerfile bakes extensions INTO the image — restart alone won't pick them up;
+  volume-mounts only cover uploads). Served bundle is `GET /extensions/sources/index.js`
+  (all ext concat) — grep it to verify a deploy landed; users must hard-refresh after.
+- **likhaHeatmap bugs fixed 2026-10-21** (commit 9b7fcaf on likhaCMS/LikhaERP): TDZ crash
+  (`let resizeObserver` declared after use — move decls before first reference) and
+  cluster clicks showing "0" (cluster features lack `value`/`popupFields` — guard
+  `properties.cluster` and `getClusterExpansionZoom`+easeTo instead of record popup).
 - **list-o2m table view**: `options.fields:["a","b"]` renders rows as columns (not just the template string);
   add `options.sortField`, `enableLink/Create/Select/SearchFilter`. Hide pure junction collections from nav
   via collection `meta.hidden:true` — still editable through the parent's O2M tab. M2O pickers need
