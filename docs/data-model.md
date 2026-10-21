@@ -190,7 +190,8 @@ incident points, household locations, resident field-points; San Fabian center
 `bis_blotter_attachments`.
 
 ## Phase 3 (remaining)
-Roles/policies (bis_secretary, bis_staff, bis_captain) w/ permission presets;
-serial-number flows (DOC-/BLT-/KP-YYYY-NNNN); SLA due-date stamping; resident-facing
-request portal + QR verification endpoint; SMS alerts; dashboard map panel
-(echarts geo scatter via `ST_AsGeoJSON`).
+Resident-facing request portal + QR verification endpoint; SMS alerts; choropleth
+purok-boundary map panel; real San Fabian purok names. Built 2026-10-21:
+`bis_staff`/`bis_secretary`/`bis_captain` roles+policies via `directus_access`
+(scripts/build_bis_phase3.py); serial flows `bis_serial_doc|blt|kp|bp`
+(`likha_sql` MAX+1 → `item-update`); `bis_stamp_sla` stamping `due_date`.

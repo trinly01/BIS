@@ -72,8 +72,12 @@ BIS-specific lessons:
   `print` fields on doc_requests/blotter/kp_cases; "BIS Dashboard" w/ 6 metric panels +
   5 echarts panels; `bis_stamp_settings` flow auto-stamps `settings` M2O → `bis_settings`
   singleton on create (letterhead in templates) + backfilled.
-- Phase 3 TODO: `bis_*` roles/policies, serial-number flows (DOC-/BLT-/KP-YYYY-NNNN),
-  SLA due-date stamping, resident portal + QR verification.
+- Phase 3 built 2026-10-21 (`scripts/build_bis_phase3.py`): roles `bis_staff`/
+  `bis_secretary`/`bis_captain` → `{role}_policy` via `directus_access` +
+  `directus_permissions` rows; serial flows `bis_serial_doc|blt|kp|bp` (event
+  items.create → likha_sql next `PREFIX-YYYY-NNNN` → item-update `{{sql_1.rows.0.serial}}`);
+  `bis_stamp_sla` flow stamps `due_date` = create + `document_types.sla_days`.
+  Remaining: portal + QR verify, SMS, choropleth panel, real purok names.
 - Design spec: `docs/data-model.md`, `docs/features.md` (provider research + value-ranked
   features), `docs/README.md` in the BIS repo.
 
@@ -100,6 +104,10 @@ BIS-specific lessons:
   Wire `op1.resolve = op2.id` and `flow.operation = op1.id`. Verify: `GET /flows/trigger/{id}`.
 - **Webhook triggers are GET, not POST** — `POST /flows/trigger/{id}` → 403 FORBIDDEN; plain GET works
   and returns the last op's result as the response body.
+- **`likha_sql` op returns `{sql, binding, rows:[...]}`** — in downstream `item-update`
+  payloads template rows via `{{sql_1.rows.0.col}}`; in `exec` ops `data.sql_1` may be
+  that object, so unwrap `rows = data.sql_1.rows || data.sql_1`. Writing `{{sql_1.0.x}}`
+  stores literal "undefined". UPDATE statements return `rows:[]` (no RETURNING).
 - **`csv` fields store a JSON-array string** (e.g. `["youth","four_ps"]`), not comma-separated text —
   expand in SQL with `jsonb_array_elements_text(sector_tags::jsonb)`; `string_to_array(col,',')`
   yields broken `["a"]`-style rows.

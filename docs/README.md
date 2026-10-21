@@ -124,8 +124,21 @@ resolve `household.location` — one pin per dwelling), while `bis_residents.fie
 seeded for 64 seniors/PWD/evacuation-priority/pregnant residents, jittered ~40m from
 their household pin. That's the set BDRRM needs at response time.
 
-## Phase 3 (next)
+## Phase 3
 
-Roles/policies (`bis_secretary`, `bis_staff`, `bis_captain`) with permission presets;
-serial-number flows (DOC-/BLT-/KP-YYYY-NNNN); SLA due-date stamping per doc type;
-resident-facing request portal + QR verification endpoint; SMS alerts.
+**Built** (`scripts/build_bis_phase3.py`):
+
+- **Roles/policies** — `bis_staff` (registry+ops CRUD, master read-only, no delete,
+  `recorded_by` preset = `$CURRENT_USER` on blotter), `bis_secretary` (full CRUD all
+  `bis_*`), `bis_captain` (read all + update on doc_requests/blotter/kp_cases/permits).
+  Each role → `bis_<role>_policy` via `directus_access`; support reads on
+  `print_template`, `directus_files`, `directus_users`, dashboards/panels.
+- **Serial flows** — `bis_serial_doc|blt|kp|bp` (event `items.create`): `likha_sql`
+  computes next `PREFIX-YYYY-NNNN` from MAX of same-year pattern, `item-update` stamps
+  `request_no`/`blotter_no`/`case_no`/`permit_no`. Verified: `DOC-2026-0001`,
+  `BLT-2026-0038`.
+- **SLA stamping** — `bis_stamp_sla` (item-read doc type → `exec` date math →
+  item-update): `bis_document_requests.due_date` = created + `sla_days`.
+
+**Remaining**: resident-facing request portal + QR verification endpoint; SMS alerts;
+choropleth (purok boundary) map panel; real San Fabian purok names.
