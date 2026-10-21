@@ -42,6 +42,8 @@ All collections: UUID PK, `accountability: all`, audit fields wired to `directus
 | `enhance_bis_fields.py` | list-o2m `fields` table views + sort, M2O picker templates, junction nav hiding |
 | `build_bis_geo.py` | geometry fields + synthesized coordinates (puroks, households, blotters, permits, vulnerable residents) |
 | `build_bis_heatmap.py` | 3 `likhaHeatmap-panel`s on the dashboard: incident, household/risk density, vulnerable-resident maps |
+| `build_bis_phase3.py` | roles/policies, `PREFIX-YYYY-NNNN` serial flows, SLA `due_date` stamping |
+| `build_bis_portal.py` | 4 public webhook flows (options/request/track/verify) + `portal_mobile` field |
 | `seed_smoke_test.py` | reference data + relational smoke test |
 | `seed_bis_data.py` | hand-crafted realistic data (officials roster, named households/residents) |
 | `seed_bis_demo.py` | procedural demo volume (~250 residents, 95 requests, count-guarded) |
@@ -140,5 +142,36 @@ their household pin. That's the set BDRRM needs at response time.
 - **SLA stamping** — `bis_stamp_sla` (item-read doc type → `exec` date math →
   item-update): `bis_document_requests.due_date` = created + `sla_days`.
 
-**Remaining**: resident-facing request portal + QR verification endpoint; SMS alerts;
-choropleth (purok boundary) map panel; real San Fabian purok names.
+**Remaining**: SMS alerts; choropleth (purok boundary) map panel; real San Fabian
+purok names.
+
+## Phase 4 — resident portal + QR verification (`scripts/build_bis_portal.py`)
+
+Public webhook flows (`trigger: webhook`, `accountability: all`, no auth — same
+pattern as `easypc_appointment_*`). The client never touches collections; an
+`exec` **validate** op sanitizes+SQL-escapes input, `likha_sql` does the work,
+and a final `exec` **respond** op returns a sanitized payload only.
+
+| Flow | Method | Purpose |
+|---|---|---|
+| `bis_portal_options` | GET | Doc types + fee/sla/validity for the request form |
+| `bis_portal_request` | POST | Validates `{first_name,last_name,mobile,document_type,purpose}` → **one CTE** `likha_sql`: find-or-create resident (mobile or name match), compute `DOC-YYYY-NNNN`, fetch fee/`sla_days`, INSERT the request row (`status: received`, `due_date`, `settings`, `portal_mobile`). Raw SQL insert emits no `items.create` event → serial/SLA event flows can't double-stamp. Response: `{ok, request_no, fee, eta}` |
+| `bis_portal_track` | POST | `{ref, key}` — ref = request_no/serial_no/or_number, key = mobile (shared secret, easypc-style). Sanitized status payload or not-found |
+| `bis_verify_doc` | GET | `?serial=` — UNION lookup across released `bis_document_requests` and non-revoked `bis_business_permits`. Returns `{valid, expired, document_type, serial_no, issued, valid_until, holder}` with **masked** resident name (`Fe B.`); permits show business name |
+
+**Frontend `portal/`** — Vite + React 19 + Tailwind 4 + react-router + lucide +
+shadcn-style ui primitives, modeled on `EasyPC/tracker`. `BrowserRouter basename="/BIS"`,
+GitHub Pages SPA fallback via `public/404.html` + sessionStorage bounce.
+Routes: `/` home, `/request` (type select → form → request_no + track link),
+`/track`, `/track/:ref/:key` (status journey timeline), `/verify/:serial`
+(QR landing — ShieldCheck/Alert/X result card).
+
+**QR verification on prints** — `bis_barangay_certificate` footer and
+`bis_business_permit` `.foot` embed
+`https://api.qrserver.com/v1/create-qr-code/?data=https%3A%2F%2Ftrinly01.github.io%2FBIS%2Fverify%2F{{ serial_no | default: request_no }}`
+— scan → `/verify/<serial>` → `bis_verify_doc` → authentic/expired/invalid.
+
+Verified live: request → `DOC-2026-0001` + new resident row + `due_date`+3;
+track matched on mobile (wrong mobile → not found); verify →
+`{"valid":true,"holder":"Fe B."}` for released cert, `Triple J Auto Repair` for
+permit `BP-2026-014`, `{"valid":false}` for unknown/released-absent serials.

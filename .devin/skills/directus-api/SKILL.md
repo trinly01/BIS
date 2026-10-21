@@ -157,6 +157,22 @@ BIS-specific lessons:
   (`let resizeObserver` declared after use — move decls before first reference) and
   cluster clicks showing "0" (cluster features lack `value`/`popupFields` — guard
   `properties.cluster` and `getClusterExpansionZoom`+easeTo instead of record popup).
+- **Public webhook flows** (`bis_portal_*`, `bis_verify_doc`; script `scripts/build_bis_portal.py`):
+  `trigger: webhook`, `accountability: "all"`, `options.method: "GET"|"POST"` — POST works
+  publicly when `method:"POST"` is set (GET-only flows 403 on POST). `data.$trigger.body` /
+  `data.$trigger.query` in exec; a final `exec` op's return = response body; a thrown
+  error → empty `{}` response (clients treat as not-found/failed). Pattern per op chain:
+  `validate` exec (required fields + `String(s).replace(/'/g,"''")` escape — likha_sql
+  interpolates `{{validate.x}}` into raw SQL) → `likha_sql` → `respond` exec (sanitized).
+  Raw `likha_sql` INSERT emits NO items.create event — portal requests bypass
+  `bis_serial_*`/`bis_stamp_sla`, so the CTE computes serial/due_date itself (no double-stamp).
+  Mobile number = shared secret for tracking (easypc WO+mobile pattern); verify returns
+  masked holder (`first_name || ' ' || left(last_name,1) || '.'`) — never expose full PII.
+- **BIS portal app** (`portal/`): Vite+React19+Tailwind4, mirrors `EasyPC/tracker`;
+  `basename="/BIS"`, GH-Pages SPA fallback via `public/404.html` + sessionStorage bounce;
+  routes `/` `/request` `/track[/:ref/:key]` `/verify/:serial`. QR on print templates via
+  `api.qrserver.com` img → `trinly01.github.io/BIS/verify/<serial>`; verify UNIONs
+  `bis_document_requests` (released) + `bis_business_permits` (non-revoked).
 - **list-o2m table view**: `options.fields:["a","b"]` renders rows as columns (not just the template string);
   add `options.sortField`, `enableLink/Create/Select/SearchFilter`. Hide pure junction collections from nav
   via collection `meta.hidden:true` — still editable through the parent's O2M tab. M2O pickers need

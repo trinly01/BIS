@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BIS Portal — Barangay Poblacion, San Fabian</title>
+    <meta name="description" content="Request barangay documents, track request status, and verify certificate authenticity." />
+    <script>
+      // SPA fallback for GitHub Pages: 404.html redirects here with the path in sessionStorage
+      ;(function () {
+        var p = sessionStorage.getItem('bis-redirect')
+        if (p) {
+          sessionStorage.removeItem('bis-redirect')
+          history.replaceState(null, '', p)
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
