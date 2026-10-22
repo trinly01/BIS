@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { getDocTypes, submitRequest } from "@/lib/api"
+import { getOptions, submitRequest } from "@/lib/api"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -12,15 +12,18 @@ const inputCls =
 const peso = (n) => (n == null ? null : "₱" + Number(n).toFixed(2))
 
 export default function RequestPage() {
-  const [types, setTypes] = useState(null)
-  const [form, setForm] = useState({ first_name: "", middle_name: "", last_name: "", mobile: "", document_type: "", purpose: "" })
+  const [opts, setOpts] = useState(null)
+  const [form, setForm] = useState({ first_name: "", middle_name: "", last_name: "", mobile: "", barangay: "", document_type: "", purpose: "" })
   const [state, setState] = useState({ loading: false, error: null, result: null })
 
   useEffect(() => {
-    getDocTypes()
-      .then(setTypes)
+    getOptions()
+      .then(setOpts)
       .catch((e) => setState((s) => ({ ...s, error: e.message })))
   }, [])
+
+  const types = opts && opts.types
+  const barangays = (opts && opts.barangays) || []
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
   const selected = types && types.find((t) => t.id === form.document_type)
@@ -77,6 +80,12 @@ export default function RequestPage() {
             <div className="flex justify-center p-8"><Loader2 className="animate-spin text-primary" size={32} /></div>
           ) : (
             <form onSubmit={submit} className="space-y-4">
+              <select required className={inputCls} value={form.barangay} onChange={set("barangay")}>
+                <option value="" disabled>Select your barangay</option>
+                {barangays.map((b) => (
+                  <option key={b.id} value={b.id}>{b.name}, {b.municipality}</option>
+                ))}
+              </select>
               <select required className={inputCls} value={form.document_type} onChange={set("document_type")}>
                 <option value="" disabled>Select document type</option>
                 {(types || []).map((t) => (

@@ -19,11 +19,11 @@ async function post(url, body) {
   return data
 }
 
-export async function getDocTypes() {
+export async function getOptions() {
   const res = await fetch(OPTIONS_URL)
-  if (!res.ok) throw new Error("Failed to load document types")
+  if (!res.ok) throw new Error("Failed to load options")
   const data = await res.json()
-  return (data && data.types) || []
+  return { types: (data && data.types) || [], barangays: (data && data.barangays) || [] }
 }
 
 export async function submitRequest(payload) {

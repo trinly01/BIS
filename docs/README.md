@@ -44,6 +44,7 @@ All collections: UUID PK, `accountability: all`, audit fields wired to `directus
 | `build_bis_heatmap.py` | 3 `likhaHeatmap-panel`s on the dashboard: incident, household/risk density, vulnerable-resident maps |
 | `build_bis_phase3.py` | roles/policies, `PREFIX-YYYY-NNNN` serial flows, SLA `due_date` stamping |
 | `build_bis_portal.py` | 4 public webhook flows (options/request/track/verify) + `portal_mobile` field |
+| `build_bis_tenancy.py` | multi-barangay: `bis_barangays`, `barangay` M2O everywhere, per-barangay settings rows, code-embedded serials, scoped roles, `bis_admin` |
 | `seed_smoke_test.py` | reference data + relational smoke test |
 | `seed_bis_data.py` | hand-crafted realistic data (officials roster, named households/residents) |
 | `seed_bis_demo.py` | procedural demo volume (~250 residents, 95 requests, count-guarded) |
@@ -144,6 +145,33 @@ their household pin. That's the set BDRRM needs at response time.
 
 **Remaining**: SMS alerts; choropleth (purok boundary) map panel; real San Fabian
 purok names.
+
+## Phase 5 — multi-barangay tenancy (`scripts/build_bis_tenancy.py`)
+
+- **`bis_barangays`** = tenant root (`name`, `code`, `municipality`, `province`,
+  `punong_barangay`, `location`, contacts) in `bis_master_data`. `barangay` M2O on
+  all 9 entity collections + `bis_settings` + `directus_users.bis_barangay`.
+- **Per-barangay letterheads**: `bis_settings` is no longer a singleton — one
+  settings row **per barangay** (`barangay` M2O). Print templates unchanged
+  (`settings.*` resolves to the record's barangay via `bis_stamp_settings`,
+  rewritten as a dynamic `likha_sql` UPDATE keyed on `{{$trigger.collection}}`).
+- **Serials embed the barangay code**: `DOC-POB-2026-0001` — per-barangay,
+  per-year counters (`bis_serial_*` rebuilt; portal INSERT does the same).
+- **Scoped roles**: `bis_staff`/`bis_secretary`/`bis_captain` perms filtered
+  `{barangay: {_eq: $CURRENT_USER.bis_barangay}}` + create presets (junctions
+  filter via parent M2O, e.g. `blotter.barangay`). New **`bis_admin`** role =
+  municipal tier, unfiltered full access.
+- **Portal**: `bis_portal_options` returns `{types, barangays}`; request form has
+  a barangay picker; `bis_portal_request` validates + inserts with barangay and
+  `DOC-<CODE>` serial.
+- Seeded: Poblacion (POB — all existing data backfilled), Binday (BIN),
+  Longos (LON), Palapad (PAL), each with its own settings/letterhead row.
+
+Verified: portal → `DOC-POB-2026-0001`; staff API create → `DOC-POB-2026-0002`
++ `due_date` + correct settings row.
+
+**Event-flow gotcha fixed**: `options.scope` takes event names
+(`items.create`), NOT collections — collections belong in `options.collections`.
 
 ## Phase 4 — resident portal + QR verification (`scripts/build_bis_portal.py`)
 

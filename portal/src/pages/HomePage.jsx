@@ -18,7 +18,7 @@ export default function HomePage() {
           <span><span className="text-primary">BIS</span> Portal</span>
         </div>
         <p className="text-muted-foreground text-sm mt-1">
-          Barangay Poblacion · San Fabian, Pangasinan
+          Municipality of San Fabian, Pangasinan
         </p>
       </div>
       <div className="w-full max-w-md space-y-4">
@@ -39,7 +39,7 @@ export default function HomePage() {
       <p className="text-muted-foreground text-xs mt-8 flex items-center gap-1">
         <QrCode size={14} /> Scan the QR code on a barangay document to verify its authenticity.
       </p>
-      <p className="text-muted-foreground text-xs mt-2">© Barangay Poblacion, San Fabian — BIS Portal</p>
+      <p className="text-muted-foreground text-xs mt-2">© Municipality of San Fabian — BIS Portal</p>
     </div>
   )
 }

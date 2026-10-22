@@ -173,6 +173,17 @@ BIS-specific lessons:
   routes `/` `/request` `/track[/:ref/:key]` `/verify/:serial`. QR on print templates via
   `api.qrserver.com` img → `trinly01.github.io/BIS/verify/<serial>`; verify UNIONs
   `bis_document_requests` (released) + `bis_business_permits` (non-revoked).
+- **Event flow `options`**: `scope` = EVENT names (`["items.create"]`), `collections` =
+  collection names, `type: "action"`, `async: true`. Putting collections in `scope` makes
+  the flow never fire (silent). `{{$trigger.collection}}` interpolates the collection name
+  into likha_sql — enables one dynamic stamp flow across many collections.
+- **Multi-barangay tenancy** (`build_bis_tenancy.py`): `bis_barangays` = tenant root;
+  `barangay` M2O on 9 entities + `bis_settings` + `directus_users.bis_barangay`.
+  `bis_settings` is per-barangay rows now (singleton→false) — templates keep `settings.*`.
+  Role perms filter `{barangay:{_eq:"$CURRENT_USER.bis_barangay"}}` + create presets;
+  junctions via parent (`{blotter:{barangay:{_eq:...}}}`). `bis_admin` = unfiltered
+  municipal tier. Serials embed code: `DOC-POB-2026-0001` (per-barangay per-year counter).
+  Op `resolve` targets must be UNIQUE — unlink existing resolve before inserting an op.
 - **list-o2m table view**: `options.fields:["a","b"]` renders rows as columns (not just the template string);
   add `options.sortField`, `enableLink/Create/Select/SearchFilter`. Hide pure junction collections from nav
   via collection `meta.hidden:true` — still editable through the parent's O2M tab. M2O pickers need
