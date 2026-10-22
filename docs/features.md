@@ -40,6 +40,9 @@ Dynite IBIS, Odoo BMIS module, ERPat functional spec, various capstone/open-sour
 
 ## What we implement on Directus (phases)
 
-- **Phase 1 (this build):** Tiers 1–2 minus print templates — registry (puroks, households, residents w/ tabs & sector tags), officials, document types, document requests w/ OR fields, blotter w/ parties + attachments, KP cases + hearings, business permits, announcements, settings singleton.
-- **Phase 2:** roles/policies (secretary/staff/captain), flows (auto serial numbers, SLA due-date stamping, status milestones), print templates (`print` interface + `print_template` rows), dashboards.
-- **Phase 3:** resident-facing request portal, QR verification endpoint, SMS alerts.
+- **Phase 1 (built):** Tiers 1–2 minus print templates — registry (puroks, households, residents w/ tabs & sector tags), officials, document types, document requests w/ OR fields, blotter w/ parties + attachments, KP cases + hearings, business permits, announcements, settings.
+- **Phase 2 (built):** 9 print templates (`print` interface + `print_template` rows), settings letterhead stamping, BIS Dashboard (6 metrics + 5 echarts flows/panels), geo fields + 3 `likhaHeatmap-panel` maps, per-record print coverage.
+- **Phase 3 (built):** roles/policies (secretary/staff/captain), serial flows (`PREFIX-<BRGY>-YYYY-NNNN`), SLA `due_date` stamping.
+- **Phase 4 (built):** resident request portal (`portal/` — React/Vite/Tailwind on GH Pages), QR verification (codes on certificate + permit templates → `/verify/:serial`), public webhook flows.
+- **Phase 5 (built):** multi-barangay tenancy — `bis_barangays`, `barangay` M2O everywhere, per-barangay letterhead settings, code-embedded serials, barangay-scoped roles, `bis_admin` municipal tier, portal barangay picker, per-barangay dashboard chart.
+- **Remaining:** SMS alerts (Semaphore), choropleth purok-boundary panel, real San Fabian purok names, remaining 30 barangays.

@@ -8,7 +8,8 @@ Every artifact prefixed `bis_`. Mirrors the `easypc_` layout: top group folder �
 ```
 BIS                       (group folder)
 ├── bis_master_data       (group folder)
-│   ├── bis_settings      (singleton)
+│   ├── bis_barangays     (tenant root, Phase 5)
+│   ├── bis_settings      (per-barangay rows — no longer singleton)
 │   ├── bis_puroks
 │   ├── bis_officials
 │   └── bis_document_types
@@ -26,14 +27,31 @@ BIS                       (group folder)
     └── bis_announcements
 ```
 
+**Multi-tenancy (Phase 5)**: every entity collection carries `barangay` M2O →
+`bis_barangays` (residents, households, document_requests, blotter, kp_cases,
+business_permits, puroks, officials, announcements) — plus `bis_settings` and
+`directus_users.bis_barangay` (staff home barangay). Junction collections
+(blotter_parties/attachments, kp_hearings) inherit scope via their parent M2O.
+
 All entity collections: `accountability: all` (user_created/user_updated/date_created/date_updated)
 + manual M2O relations to `directus_users` (skill rule 9 — audit relations are NOT auto-created).
 
 ## Collections
 
-### bis_settings (singleton)
+### bis_barangays (Phase 5 — tenant root)
+`name* (short: "Poblacion"), code* (serial prefix: POB), municipality, province,
+region, punong_barangay, contact_number, email, location (Point, map)`.
+Naming convention: SHORT name here; full legal name ("Barangay Poblacion")
+lives in that barangay's `bis_settings.barangay_name` (letterhead).
+Onboard = insert barangay row + clone a `bis_settings` row pointed at it.
+
+### bis_settings (per-barangay — was singleton until Phase 5)
 `barangay_name, city_municipality, province, region, punong_barangay, secretary_name,
-treasurer_name, logo→directus_files, doc_header (richtext), doc_footer, contact_number, email`
+treasurer_name, logo→directus_files, doc_header (richtext), doc_footer,
+contact_number, email, barangay→bis_barangays`.
+One row per barangay = its letterhead. `bis_stamp_settings` (event, items.create,
+dynamic `likha_sql` keyed on `{{$trigger.collection}}`) stamps the matching row
+onto new printables — templates keep reading `settings.*` unchanged.
 
 ### bis_puroks
 `name*, description, risk_level (low/moderate/high), notes`,
@@ -74,8 +92,10 @@ location (Point, map)`
   `privacy_consent, consent_date, notes`, `print` (barangay ID)
 
 ### bis_document_requests — 4 tabs
-- **Request**: `request_no, resident→bis_residents*, document_type→bis_document_types*,
-  purpose, date_requested, settings→bis_settings (hidden, flow-stamped), status
+- **Request**: `request_no (DOC-<CODE>-YYYY-NNNN, flow-stamped), resident→bis_residents*,
+  document_type→bis_document_types*, purpose, date_requested, due_date (SLA-stamped),
+  portal_mobile (portal tracking key), settings→bis_settings (hidden, flow-stamped),
+  barangay→bis_barangays, status
   (received/requirements_check/for_payment/for_signature/released/rejected/cancelled)`
 - **Payment**: `fee, or_number, or_date, amount_paid, processed_by→directus_users`
 - **Release**: `serial_no, issued_date, valid_until, signatory→bis_officials, released_to,
@@ -149,6 +169,8 @@ publish_at, expires_at, pinned, status (draft/published/archived), posted_by→d
 | bis_business_permits | purok | bis_puroks | `business_permits` |
 | bis_announcements | posted_by | directus_users | — |
 | bis_settings | logo | directus_files | — |
+| *9 entity collections + bis_settings* | barangay | bis_barangays | — |
+| directus_users | bis_barangay | bis_barangays | — |
 | *every collection* | user_created/user_updated | directus_users | — |
 
 Tab pattern (native, verified on easypc): `grp_tabs` alias w/ `interface: group-tabs`;
@@ -189,9 +211,40 @@ incident points, household locations, resident field-points; San Fabian center
 **Junction collections** (nav-hidden, edited via parent tabs): `bis_blotter_parties`,
 `bis_blotter_attachments`.
 
-## Phase 3 (remaining)
-Resident-facing request portal + QR verification endpoint; SMS alerts; choropleth
-purok-boundary map panel; real San Fabian purok names. Built 2026-10-21:
-`bis_staff`/`bis_secretary`/`bis_captain` roles+policies via `directus_access`
-(scripts/build_bis_phase3.py); serial flows `bis_serial_doc|blt|kp|bp`
-(`likha_sql` MAX+1 → `item-update`); `bis_stamp_sla` stamping `due_date`.
+**Metric fields** (heatmap weights, read-only): `bis_blotter.severity` (1–5,
+mapped from incident_type), `bis_households.risk_score` (1+#risk_tags),
+`bis_residents.vulnerability_score` (1+#sector_tags).
+
+## Phase 3 — built 2026-10-21 (`scripts/build_bis_phase3.py`)
+
+Roles+policies via `directus_access`: `bis_staff`, `bis_secretary`, `bis_captain`.
+Serial flows `bis_serial_doc|blt|kp|bp` (event items.create → `likha_sql`
+MAX+1 → `item-update`, now emit `PREFIX-<BRGYCODE>-YYYY-NNNN`).
+`bis_stamp_sla` stamps `due_date` from `document_types.sla_days`.
+
+## Phase 4 — resident portal + QR (`scripts/build_bis_portal.py`, `portal/`)
+
+Public webhook flows (`accountability: all`, no auth — validate exec →
+`likha_sql` → sanitized respond exec): `bis_portal_options` (GET — doc types +
+barangays), `bis_portal_request` (POST — find-or-create resident, CTE INSERT
+with serial/due_date/settings/barangay, bypasses event serial flows),
+`bis_portal_track` (POST — request_no/serial/OR + mobile), `bis_verify_doc`
+(GET — UNION released requests + active permits, masked holder).
+
+`portal/` = Vite+React19+Tailwind4 app (EasyPC tracker pattern), GH Pages at
+`trinly01.github.io/BIS` — routes `/`, `/request` (searchable barangay
+combobox), `/track[/:ref/:key]`, `/verify/:serial`. QR codes embedded in
+`bis_barangay_certificate` + `bis_business_permit` templates via api.qrserver.com.
+
+## Phase 5 — multi-barangay (`scripts/build_bis_tenancy.py`)
+
+See `bis_barangays` + tenancy note above. Scoped perms
+`{barangay:{_eq:$CURRENT_USER.bis_barangay}}` on staff/secretary/captain
+(junctions via parent M2O) + create presets; `bis_admin` = municipal tier
+(unfiltered). Dashboard: metric/heatmap panels auto-scope per viewer;
+echarts are municipal aggregates (added `bis_chart_requests_per_barangay`
+stacked bars + multi-line issuance trend per barangay).
+
+## Remaining
+SMS alerts (Semaphore); choropleth purok-boundary panel; real San Fabian
+purok names; more barangays (34 total in San Fabian).
