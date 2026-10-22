@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Loader2, CheckCircle2, ArrowLeft } from "lucide-react"
+import SearchableSelect from "@/components/SearchableSelect"
 
 const inputCls =
   "w-full h-11 rounded-md border border-input bg-background px-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
@@ -30,6 +31,7 @@ export default function RequestPage() {
 
   async function submit(e) {
     e.preventDefault()
+    if (!form.barangay) { setState((s) => ({ ...s, error: "Please select your barangay" })); return }
     setState({ loading: true, error: null, result: null })
     try {
       const r = await submitRequest(form)
@@ -80,12 +82,13 @@ export default function RequestPage() {
             <div className="flex justify-center p-8"><Loader2 className="animate-spin text-primary" size={32} /></div>
           ) : (
             <form onSubmit={submit} className="space-y-4">
-              <select required className={inputCls} value={form.barangay} onChange={set("barangay")}>
-                <option value="" disabled>Select your barangay</option>
-                {barangays.map((b) => (
-                  <option key={b.id} value={b.id}>{b.name}, {b.municipality}</option>
-                ))}
-              </select>
+              <SearchableSelect
+                placeholder="Select your barangay"
+                value={form.barangay}
+                onChange={(id) => setForm((f) => ({ ...f, barangay: id }))}
+                items={barangays.map((b) => ({ id: b.id, label: b.name, sub: b.municipality }))}
+              />
+
               <select required className={inputCls} value={form.document_type} onChange={set("document_type")}>
                 <option value="" disabled>Select document type</option>
                 {(types || []).map((t) => (
