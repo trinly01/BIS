@@ -167,6 +167,17 @@ purok names.
 - Seeded: Poblacion (POB — all existing data backfilled), Binday (BIN),
   Longos (LON), Palapad (PAL), each with its own settings/letterhead row.
 
+**Naming convention**: `bis_barangays.name` holds the SHORT name (`Poblacion`)
+— used in pickers, charts, filters. The full legal name (`Barangay Poblacion`)
+lives in that barangay's `bis_settings.barangay_name` (letterhead only).
+Onboarding a new barangay = insert `bis_barangays` row + clone a `bis_settings`
+row pointed at it.
+
+**Portal**: barangay field is a searchable combobox
+(`portal/src/components/SearchableSelect.jsx`, ported from EasyPC) — filters on
+name + municipality; submit-side validation (custom combobox can't use native
+`required`).
+
 Verified: portal → `DOC-POB-2026-0001`; staff API create → `DOC-POB-2026-0002`
 + `due_date` + correct settings row.
 
