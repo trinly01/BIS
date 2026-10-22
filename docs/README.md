@@ -173,6 +173,13 @@ Verified: portal → `DOC-POB-2026-0001`; staff API create → `DOC-POB-2026-000
 **Event-flow gotcha fixed**: `options.scope` takes event names
 (`items.create`), NOT collections — collections belong in `options.collections`.
 
+**Dashboard in multi-barangay mode**: metric tiles + `likhaHeatmap-panel` query
+under the *viewer's* permissions — barangay-scoped roles see only their own
+barangay; `bis_admin`/admin see municipal totals. ECharts panels run
+`accountability: all` (municipal aggregates for everyone) — added
+`bis_chart_requests_per_barangay` (stacked status bars per barangay) so the
+municipal view compares barangays at a glance.
+
 ## Phase 4 — resident portal + QR verification (`scripts/build_bis_portal.py`)
 
 Public webhook flows (`trigger: webhook`, `accountability: all`, no auth — same
