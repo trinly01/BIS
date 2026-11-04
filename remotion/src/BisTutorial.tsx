@@ -51,6 +51,7 @@ const Caption: React.FC<{ t: string }> = ({ t }) => {
 };
 
 export const BisTutorial: React.FC = () => {
+  const G = useCurrentFrame();
   return (
     <AbsoluteFill>
       <Audio src={staticFile("sfx/music.wav")} volume={0.12} />
@@ -58,9 +59,9 @@ export const BisTutorial: React.FC = () => {
       <Sequence from={0} durationInFrames={200}>
         <Scene>
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 130, fontWeight: 900, color: C.primary, opacity: fade(useCurrentFrame(), 0, 50) }}>BIS</div>
-            <div style={{ fontSize: 44, fontWeight: 800, color: "#fff", opacity: fade(useCurrentFrame(), 10, 52) }}>Barangay Information System</div>
-            <div style={{ fontSize: 30, color: C.muted, marginTop: 12, opacity: fade(useCurrentFrame(), 20, 55) }}>Government services, streamlined.</div>
+            <div style={{ fontSize: 130, fontWeight: 900, color: C.primary, opacity: fade((G - 0), 0, 50) }}>BIS</div>
+            <div style={{ fontSize: 44, fontWeight: 800, color: "#fff", opacity: fade((G - 0), 10, 52) }}>Barangay Information System</div>
+            <div style={{ fontSize: 30, color: C.muted, marginTop: 12, opacity: fade((G - 0), 20, 55) }}>Government services, streamlined.</div>
           </div>
           <Audio src={staticFile("vo/s2_intro.mp3")} />
         </Scene>
@@ -82,7 +83,7 @@ export const BisTutorial: React.FC = () => {
           </div>
           <Cursor pts={[[1100, 700, 0], [1100, 700, 18], [640, 400, 46], [640, 400, 70]]} clicks={[52]} />
           <Audio src={staticFile("vo/t1_home.mp3")} />
-          {useCurrentFrame() >= 52 && <Audio src={staticFile("sfx/click.wav")} />}
+          {(G - 200) >= 52 && <Audio src={staticFile("sfx/click.wav")} />}
           <Caption t="Step 1 — open the portal, tap Request a Document" />
         </Scene>
       </Sequence>
@@ -96,12 +97,12 @@ export const BisTutorial: React.FC = () => {
               <Typed f0={24} text="Barangay Clearance — ₱50 · ~3 days" ph="Select document type" />
               <Typed f0={38} text="Maria Santos" ph="Full name" />
               <Typed f0={50} text="0917 123 4567" ph="Mobile number" />
-              <div style={{ marginTop: 4, transform: `scale(${useCurrentFrame() >= 66 ? 0.97 : 1})` }}><Btn press={useCurrentFrame() >= 66}>Submit request</Btn></div>
+              <div style={{ marginTop: 4, transform: `scale(${(G - 410) >= 66 ? 0.97 : 1})` }}><Btn press={(G - 410) >= 66}>Submit request</Btn></div>
             </div>
           </Card>
           <Cursor pts={[[900, 300, 0], [520, 250, 14], [520, 470, 36], [520, 470, 50], [540, 640, 62], [540, 640, 80]]} clicks={[18, 40, 66]} />
           <Audio src={staticFile("vo/t2_form.mp3")} />
-          {useCurrentFrame() >= 66 && <Audio src={staticFile("sfx/click.wav")} />}
+          {(G - 410) >= 66 && <Audio src={staticFile("sfx/click.wav")} />}
           <Caption t="Step 2 — pick barangay + document, name and mobile" />
         </Scene>
       </Sequence>
@@ -109,7 +110,7 @@ export const BisTutorial: React.FC = () => {
       <Sequence from={575} durationInFrames={180}>
         <Scene>
           <Card w={560} style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 64, opacity: fade(useCurrentFrame(), 4, 60) }}>✅</div>
+            <div style={{ fontSize: 64, opacity: fade((G - 575), 4, 60) }}>✅</div>
             <div style={{ fontSize: 30, fontWeight: 800, color: "#fff", margin: "10px 0" }}>Request received</div>
             <div style={{ fontSize: 42, fontWeight: 900, color: C.primary, fontFamily: "monospace", margin: "10px 0" }}>DOC-POB-2026-0007</div>
             <div style={{ fontSize: 20, color: C.muted }}>Barangay Clearance · Fee ₱50 · ETA Nov 7</div>
@@ -128,7 +129,7 @@ export const BisTutorial: React.FC = () => {
               <Badge color={C.warn}>For Signature</Badge>
             </div>
             {["Received", "Requirements Check", "For Payment", "For Signature", "Released"].map((s, i) => {
-              const f = useCurrentFrame();
+              const f = (G - 755);
               const done = i < 3 || (i === 3 && f > 34);
               return (
                 <div key={s} style={{ display: "flex", gap: 14, alignItems: "flex-start", opacity: i <= 3 ? 1 : 0.4 }}>
@@ -161,7 +162,7 @@ export const BisTutorial: React.FC = () => {
             </Card>
             <div style={{ display: "flex", gap: 12, marginTop: 18 }}>
               {["Review", "Collect Payment", "Print", "Release"].map((a, i) => (
-                <Badge key={a} color={i <= useCurrentFrame() / 14 ? C.accent : C.muted}>{a}</Badge>
+                <Badge key={a} color={i <= (G - 950) / 14 ? C.accent : C.muted}>{a}</Badge>
               ))}
             </div>
           </div>
@@ -174,22 +175,22 @@ export const BisTutorial: React.FC = () => {
         <Scene>
           <Card w={560} style={{ textAlign: "center" }}>
             <div style={{ width: 120, height: 120, margin: "0 auto 16px", background: "#fff", borderRadius: 12, display: "grid", placeItems: "center", fontSize: 60 }}>▦</div>
-            <div style={{ fontSize: 56, opacity: fade(useCurrentFrame(), 8, 70) }}>🛡️</div>
+            <div style={{ fontSize: 56, opacity: fade((G - 1150), 8, 70) }}>🛡️</div>
             <div style={{ fontSize: 30, fontWeight: 800, color: C.accent }}>Authentic document</div>
             <div style={{ fontSize: 20, color: C.muted, marginTop: 8 }}>Barangay Clearance · issued to Maria S. · valid until Feb 2027</div>
           </Card>
           <Audio src={staticFile("vo/t6_verify.mp3")} />
-          {useCurrentFrame() >= 8 && <Audio src={staticFile("sfx/chime.wav")} />}
+          {(G - 1150) >= 8 && <Audio src={staticFile("sfx/chime.wav")} />}
           <Caption t="Every certificate has a QR — scan to verify" />
         </Scene>
       </Sequence>
       {/* 7 — feature grid (1365-1705) */}
       <Sequence from={1365} durationInFrames={340}>
         <Scene>
-          <div style={{ textAlign: "center", fontSize: 34, fontWeight: 800, color: "#fff", marginBottom: 26, opacity: fade(useCurrentFrame(), 4, 185) }}>And that's not all</div>
+          <div style={{ textAlign: "center", fontSize: 34, fontWeight: 800, color: "#fff", marginBottom: 26, opacity: fade((G - 1365), 4, 185) }}>And that's not all</div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 18, justifyContent: "center", maxWidth: 900 }}>
             {["Resident & Household Registry", "Blotter & KP Mediation", "Business Permits", "Announcements", "Barangay Assets", "Benefits Tracking"].map((t, i) => {
-              const f = useCurrentFrame();
+              const f = (G - 1365);
               return (
                 <div key={t} style={{ background: C.card, border: `1.5px solid ${C.primary}44`, borderRadius: 14, padding: "20px 28px", fontSize: 24, fontWeight: 600, color: "#e8f0ff", opacity: fade(f, 6 + i * 6, 190) }}>
                   <span style={{ color: C.accent, marginRight: 10 }}>●</span>{t}
@@ -205,10 +206,10 @@ export const BisTutorial: React.FC = () => {
       <Sequence from={1705} durationInFrames={277}>
         <Scene>
           <div style={{ width: 860 }}>
-            <div style={{ fontSize: 28, color: C.muted, marginBottom: 16, opacity: fade(useCurrentFrame(), 4, 185) }}>For admins — live dashboards</div>
+            <div style={{ fontSize: 28, color: C.muted, marginBottom: 16, opacity: fade((G - 1705), 4, 185) }}>For admins — live dashboards</div>
             <div style={{ display: "flex", gap: 16, marginBottom: 18 }}>
               {[["Residents", "1,248"], ["Households", "412"], ["Certs Issued", "96"]].map(([l, v], i) => {
-                const f = useCurrentFrame();
+                const f = (G - 1705);
                 return (
                   <Card key={l} w={270} style={{ padding: 18, opacity: fade(f, 6 + i * 5, 188) }}>
                     <div style={{ fontSize: 17, color: C.muted }}>{l}</div>
@@ -222,7 +223,7 @@ export const BisTutorial: React.FC = () => {
                 <div style={{ fontSize: 16, color: C.muted, marginBottom: 10 }}>Issuance trend</div>
                 <div style={{ display: "flex", alignItems: "flex-end", gap: 10, height: 110 }}>
                   {[40, 55, 48, 70, 62, 85, 78, 95].map((h, i) => {
-                    const f = useCurrentFrame();
+                    const f = (G - 1705);
                     return <div key={i} style={{ flex: 1, background: `linear-gradient(180deg, ${C.primary}, ${C.primary}55)`, borderRadius: 4, height: h * fade(f, 8 + i * 3, 185) }} />;
                   })}
                 </div>
@@ -230,7 +231,7 @@ export const BisTutorial: React.FC = () => {
               <Card w={360} style={{ padding: 18 }}>
                 <div style={{ fontSize: 16, color: C.muted, marginBottom: 10 }}>By barangay</div>
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: 110 }}>
-                  <div style={{ width: 100, height: 100, borderRadius: 50, background: `conic-gradient(${C.primary} 0 55%, ${C.accent} 55% 80%, ${C.warn} 80% 100%)`, opacity: fade(useCurrentFrame(), 14, 185) }}>
+                  <div style={{ width: 100, height: 100, borderRadius: 50, background: `conic-gradient(${C.primary} 0 55%, ${C.accent} 55% 80%, ${C.warn} 80% 100%)`, opacity: fade((G - 1705), 14, 185) }}>
                     <div style={{ width: 56, height: 56, borderRadius: 28, background: C.card, margin: 22 }} />
                   </div>
                 </div>
@@ -243,7 +244,7 @@ export const BisTutorial: React.FC = () => {
                   <div style={{ position: "absolute", left: "30%", top: 0, bottom: 0, width: 6, background: "#d4b48c", borderRadius: 3 }} />
                   <div style={{ position: "absolute", left: 0, right: 0, top: "45%", height: 5, background: "#a8c8e0" }} />
                   {[[25, 30], [40, 55], [55, 40], [65, 70], [48, 25], [72, 45], [35, 65], [58, 60]].map(([x, y], i) => {
-                    const f = useCurrentFrame();
+                    const f = (G - 1705);
                     const sc = fade(f, 20 + i * 4, 190);
                     return <div key={i} style={{ position: "absolute", left: `${x}%`, top: `${y}%`, width: 26, height: 26, borderRadius: 13, background: "radial-gradient(circle, #e0533c 30%, #e0533c44 70%, transparent)", transform: `translate(-50%,-50%) scale(${sc})` }} />;
                   })}
@@ -253,7 +254,7 @@ export const BisTutorial: React.FC = () => {
                 <div style={{ fontSize: 16, color: C.muted, marginBottom: 10 }}>Purok boundaries</div>
                 <div style={{ height: 110, background: "#e8e4dc", borderRadius: 8, position: "relative", overflow: "hidden" }}>
                   {[[[15, 15], [30, 60]], [[50, 10], [70, 45]], [[55, 55], [80, 90]], [[12, 62], [40, 90]]].map(([[x1, y1], [x2, y2]], i) => {
-                    const f = useCurrentFrame();
+                    const f = (G - 1705);
                     const cols = [C.primary, C.accent, C.warn, "#e0533c"];
                     return <div key={i} style={{ position: "absolute", left: `${x1}%`, top: `${y1}%`, width: `${x2 - x1}%`, height: `${y2 - y1}%`, background: `${cols[i]}99`, border: `2px solid ${cols[i]}`, borderRadius: 3, opacity: fade(f, 24 + i * 4, 190) }} />;
                   })}
@@ -269,9 +270,9 @@ export const BisTutorial: React.FC = () => {
       <Sequence from={1982} durationInFrames={160}>
         <Scene>
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 60, fontWeight: 900, color: "#fff", opacity: fade(useCurrentFrame(), 4, 150) }}>Your barangay, digital.</div>
-            <div style={{ fontSize: 36, fontWeight: 800, color: C.primary, marginTop: 14, opacity: fade(useCurrentFrame(), 20, 152) }}>trinly01.github.io/BIS</div>
-            <div style={{ fontSize: 24, color: C.muted, marginTop: 14, opacity: fade(useCurrentFrame(), 34, 155) }}>San Fabian, Pangasinan</div>
+            <div style={{ fontSize: 60, fontWeight: 900, color: "#fff", opacity: fade((G - 1982), 4, 150) }}>Your barangay, digital.</div>
+            <div style={{ fontSize: 36, fontWeight: 800, color: C.primary, marginTop: 14, opacity: fade((G - 1982), 20, 152) }}>trinly01.github.io/BIS</div>
+            <div style={{ fontSize: 24, color: C.muted, marginTop: 14, opacity: fade((G - 1982), 34, 155) }}>San Fabian, Pangasinan</div>
           </div>
           <Audio src={staticFile("vo/s6_outro.mp3")} />
         </Scene>
