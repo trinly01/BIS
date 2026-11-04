@@ -236,6 +236,30 @@ export const BisTutorial: React.FC = () => {
                 </div>
               </Card>
             </div>
+            <div style={{ display: "flex", gap: 18, marginTop: 18 }}>
+              <Card w={480} style={{ padding: 18 }}>
+                <div style={{ fontSize: 16, color: C.muted, marginBottom: 10 }}>Incident heatmap</div>
+                <div style={{ height: 110, background: "#e8e4dc", borderRadius: 8, position: "relative", overflow: "hidden" }}>
+                  <div style={{ position: "absolute", left: "30%", top: 0, bottom: 0, width: 6, background: "#d4b48c", borderRadius: 3 }} />
+                  <div style={{ position: "absolute", left: 0, right: 0, top: "45%", height: 5, background: "#a8c8e0" }} />
+                  {[[25, 30], [40, 55], [55, 40], [65, 70], [48, 25], [72, 45], [35, 65], [58, 60]].map(([x, y], i) => {
+                    const f = useCurrentFrame();
+                    const sc = fade(f, 20 + i * 4, 190);
+                    return <div key={i} style={{ position: "absolute", left: `${x}%`, top: `${y}%`, width: 26, height: 26, borderRadius: 13, background: "radial-gradient(circle, #e0533c 30%, #e0533c44 70%, transparent)", transform: `translate(-50%,-50%) scale(${sc})` }} />;
+                  })}
+                </div>
+              </Card>
+              <Card w={360} style={{ padding: 18 }}>
+                <div style={{ fontSize: 16, color: C.muted, marginBottom: 10 }}>Purok boundaries</div>
+                <div style={{ height: 110, background: "#e8e4dc", borderRadius: 8, position: "relative", overflow: "hidden" }}>
+                  {[[[15, 15], [30, 60]], [[50, 10], [70, 45]], [[55, 55], [80, 90]], [[12, 62], [40, 90]]].map(([[x1, y1], [x2, y2]], i) => {
+                    const f = useCurrentFrame();
+                    const cols = [C.primary, C.accent, C.warn, "#e0533c"];
+                    return <div key={i} style={{ position: "absolute", left: `${x1}%`, top: `${y1}%`, width: `${x2 - x1}%`, height: `${y2 - y1}%`, background: `${cols[i]}99`, border: `2px solid ${cols[i]}`, borderRadius: 3, opacity: fade(f, 24 + i * 4, 190) }} />;
+                  })}
+                </div>
+              </Card>
+            </div>
           </div>
           <Audio src={staticFile("vo/t8_analytics.mp3")} />
           <Caption t="Live dashboards — per barangay or municipality-wide" />
