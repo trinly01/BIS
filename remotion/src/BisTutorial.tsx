@@ -71,9 +71,13 @@ export const BisTutorial: React.FC = () => {
       <Sequence from={0} durationInFrames={200}>
         <Scene>
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 130, fontWeight: 900, color: C.primary, ...pop((G - 0), 0, 16) }}>BIS</div>
-            <div style={{ fontSize: 44, fontWeight: 800, color: "#fff", opacity: fade((G - 0), 10, 52) }}>Barangay Information System</div>
-            <div style={{ fontSize: 30, color: C.muted, marginTop: 12, opacity: fade((G - 0), 20, 55) }}>Government services, streamlined.</div>
+            <div style={{ fontSize: 130, fontWeight: 900, color: C.primary }}>
+              {["B", "I", "S"].map((l, i) => (
+                <span key={l} style={{ display: "inline-block", marginRight: 6, ...pop((G - 0), 18 + i * 13, 14) }}>{l}</span>
+              ))}
+            </div>
+            <div style={{ fontSize: 44, fontWeight: 800, color: "#fff", opacity: fade((G - 0), 55, 200) }}>Barangay Information System</div>
+            <div style={{ fontSize: 30, color: C.muted, marginTop: 12, opacity: fade((G - 0), 75, 202) }}>Government services, streamlined.</div>
           </div>
           <Audio src={staticFile("vo/s2_intro.mp3")} />
         </Scene>
