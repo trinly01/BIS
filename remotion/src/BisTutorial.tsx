@@ -216,7 +216,7 @@ export const BisTutorial: React.FC = () => {
       {/* 7 — feature grid (1365-1705) */}
       <Sequence from={1365} durationInFrames={340}>
         <Scene>
-          <div style={{ textAlign: "center", fontSize: 34, fontWeight: 800, color: "#fff", marginBottom: 26, opacity: fade((G - 1365), 4, 185) }}>And that's not all</div>
+          <div style={{ textAlign: "center", fontSize: 34, fontWeight: 800, color: "#fff", marginBottom: 26, ...pop((G - 1365), 2, 16) }}>And that's not all</div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 18, justifyContent: "center", maxWidth: 900 }}>
             {["Resident & Household Registry", "Blotter & KP Mediation", "Business Permits", "Announcements", "Barangay Assets", "Benefits Tracking"].map((t, i) => {
               const f = (G - 1365);
