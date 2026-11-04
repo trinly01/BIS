@@ -1,4 +1,10 @@
-import { AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame, Sequence } from "remotion";
+import { AbsoluteFill, Audio, Easing, interpolate, staticFile, useCurrentFrame, Sequence } from "remotion";
+
+// poppy overshoot entrance — scale 0.5→1 with elastic settle
+const pop = (f: number, s: number, dur = 14) => {
+  const p = interpolate(f, [s, s + dur], [0, 1], { easing: Easing.back(1.8), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  return { opacity: Math.min(1, p * 2), transform: `scale(${0.5 + p * 0.5})` };
+};
 
 // BIS portal theme — matches portal/src/index.css
 const C = { bg: "#0c1424", card: "#16233f", primary: "#7cc4ff", muted: "#9db4d8", accent: "#5ce6a0", warn: "#ffd166", border: "#24365c", input: "#1a2a4a" };
@@ -59,7 +65,7 @@ export const BisTutorial: React.FC = () => {
       <Sequence from={0} durationInFrames={200}>
         <Scene>
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 130, fontWeight: 900, color: C.primary, opacity: fade((G - 0), 0, 50) }}>BIS</div>
+            <div style={{ fontSize: 130, fontWeight: 900, color: C.primary, ...pop((G - 0), 0, 16) }}>BIS</div>
             <div style={{ fontSize: 44, fontWeight: 800, color: "#fff", opacity: fade((G - 0), 10, 52) }}>Barangay Information System</div>
             <div style={{ fontSize: 30, color: C.muted, marginTop: 12, opacity: fade((G - 0), 20, 55) }}>Government services, streamlined.</div>
           </div>
@@ -110,7 +116,7 @@ export const BisTutorial: React.FC = () => {
       <Sequence from={575} durationInFrames={180}>
         <Scene>
           <Card w={560} style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 64, opacity: fade((G - 575), 4, 60) }}>✅</div>
+            <div style={{ fontSize: 64, ...pop((G - 575), 4, 18) }}>✅</div>
             <div style={{ fontSize: 30, fontWeight: 800, color: "#fff", margin: "10px 0" }}>Request received</div>
             <div style={{ fontSize: 42, fontWeight: 900, color: C.primary, fontFamily: "monospace", margin: "10px 0" }}>DOC-POB-2026-0007</div>
             <div style={{ fontSize: 20, color: C.muted }}>Barangay Clearance · Fee ₱50 · ETA Nov 7</div>
@@ -211,7 +217,7 @@ export const BisTutorial: React.FC = () => {
               {[["Residents", "1,248"], ["Households", "412"], ["Certs Issued", "96"]].map(([l, v], i) => {
                 const f = (G - 1705);
                 return (
-                  <Card key={l} w={270} style={{ padding: 18, opacity: fade(f, 6 + i * 5, 188) }}>
+                  <Card key={l} w={270} style={{ padding: 18, ...pop(f, 6 + i * 5, 14) }}>
                     <div style={{ fontSize: 17, color: C.muted }}>{l}</div>
                     <div style={{ fontSize: 38, fontWeight: 900, color: C.primary }}>{v}</div>
                   </Card>
@@ -270,7 +276,7 @@ export const BisTutorial: React.FC = () => {
       <Sequence from={1982} durationInFrames={160}>
         <Scene>
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 60, fontWeight: 900, color: "#fff", opacity: fade((G - 1982), 4, 150) }}>Your barangay, digital.</div>
+            <div style={{ fontSize: 60, fontWeight: 900, color: "#fff", ...pop((G - 1982), 4, 16) }}>Your barangay, digital.</div>
             <div style={{ fontSize: 36, fontWeight: 800, color: C.primary, marginTop: 14, opacity: fade((G - 1982), 20, 152) }}>trinly01.github.io/BIS</div>
             <div style={{ fontSize: 24, color: C.muted, marginTop: 14, opacity: fade((G - 1982), 34, 155) }}>San Fabian, Pangasinan</div>
           </div>

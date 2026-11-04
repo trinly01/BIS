@@ -18,7 +18,7 @@ const Scene: React.FC<{ children: React.ReactNode; center?: boolean }> = ({ chil
 const Line: React.FC<{ t: string; size?: number; color?: string; delay?: number; center?: boolean }> = ({ t, size = 52, color = "#fff", delay = 0, center }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const s = spring({ frame: frame - delay, fps, config: { damping: 15 } });
+  const s = spring({ frame: frame - delay, fps, config: { damping: 9, mass: 0.5 } });
   return (
     <div style={{ fontSize: size, fontWeight: 800, color, lineHeight: 1.25, textAlign: center ? "center" : "left", opacity: s, transform: `translateY(${(1 - s) * 30}px)` }}>
       {t}
