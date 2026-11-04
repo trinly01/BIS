@@ -10,9 +10,9 @@ export const Root: React.FC = () => {
       <Composition id="BisAd-9x16" component={() => <BisAd vertical />} durationInFrames={1140} fps={30} width={1080} height={1920} />
       <Composition id="BisAd-1x1" component={BisAd} durationInFrames={1140} fps={30} width={1080} height={1080} />
       <Composition id="BisAd-16x9" component={BisAd} durationInFrames={1140} fps={30} width={1920} height={1080} />
-      <Composition id="BisTutorial-16x9" component={BisTutorial} durationInFrames={1915} fps={30} width={1920} height={1080} />
-      <Composition id="BisTutorial-9x16" component={BisTutorial} durationInFrames={1915} fps={30} width={1080} height={1920} />
-      <Composition id="BisTutorial-1x1" component={BisTutorial} durationInFrames={1915} fps={30} width={1080} height={1080} />
+      <Composition id="BisTutorial-16x9" component={BisTutorial} durationInFrames={2142} fps={30} width={1920} height={1080} />
+      <Composition id="BisTutorial-9x16" component={BisTutorial} durationInFrames={2142} fps={30} width={1080} height={1920} />
+      <Composition id="BisTutorial-1x1" component={BisTutorial} durationInFrames={2142} fps={30} width={1080} height={1080} />
     </>
   );
 };

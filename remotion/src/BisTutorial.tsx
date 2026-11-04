@@ -183,8 +183,8 @@ export const BisTutorial: React.FC = () => {
           <Caption t="Every certificate has a QR — scan to verify" />
         </Scene>
       </Sequence>
-      {/* 7 — feature grid (1365-1560) */}
-      <Sequence from={1365} durationInFrames={195}>
+      {/* 7 — feature grid (1365-1705) */}
+      <Sequence from={1365} durationInFrames={340}>
         <Scene>
           <div style={{ textAlign: "center", fontSize: 34, fontWeight: 800, color: "#fff", marginBottom: 26, opacity: fade(useCurrentFrame(), 4, 185) }}>And that's not all</div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 18, justifyContent: "center", maxWidth: 900 }}>
@@ -201,8 +201,8 @@ export const BisTutorial: React.FC = () => {
           <Caption t="Everything your barangay needs, one system" />
         </Scene>
       </Sequence>
-      {/* 8 — analytics mock (1560-1755) */}
-      <Sequence from={1560} durationInFrames={195}>
+      {/* 8 — analytics mock (1705-1982) */}
+      <Sequence from={1705} durationInFrames={277}>
         <Scene>
           <div style={{ width: 860 }}>
             <div style={{ fontSize: 28, color: C.muted, marginBottom: 16, opacity: fade(useCurrentFrame(), 4, 185) }}>For admins — live dashboards</div>
@@ -241,8 +241,8 @@ export const BisTutorial: React.FC = () => {
           <Caption t="Live dashboards — per barangay or municipality-wide" />
         </Scene>
       </Sequence>
-      {/* 9 — closer (1755-1915) */}
-      <Sequence from={1755} durationInFrames={160}>
+      {/* 9 — closer (1982-2142) */}
+      <Sequence from={1982} durationInFrames={160}>
         <Scene>
           <div style={{ textAlign: "center" }}>
             <div style={{ fontSize: 60, fontWeight: 900, color: "#fff", opacity: fade(useCurrentFrame(), 4, 150) }}>Your barangay, digital.</div>
