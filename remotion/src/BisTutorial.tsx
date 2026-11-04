@@ -53,7 +53,8 @@ const Caption: React.FC<{ t: string }> = ({ t }) => {
 export const BisTutorial: React.FC = () => {
   return (
     <AbsoluteFill>
-      {/* 0 — intro: what is BIS (0-60) */}
+      <Audio src={staticFile("sfx/music.wav")} volume={0.12} />
+      {/* 0 — intro: what is BIS (0-200) */}
       <Sequence from={0} durationInFrames={200}>
         <Scene>
           <div style={{ textAlign: "center" }}>
@@ -180,6 +181,75 @@ export const BisTutorial: React.FC = () => {
           <Audio src={staticFile("vo/t6_verify.mp3")} />
           {useCurrentFrame() >= 8 && <Audio src={staticFile("sfx/chime.wav")} />}
           <Caption t="Every certificate has a QR — scan to verify" />
+        </Scene>
+      </Sequence>
+      {/* 7 — feature grid (1365-1560) */}
+      <Sequence from={1365} durationInFrames={195}>
+        <Scene>
+          <div style={{ textAlign: "center", fontSize: 34, fontWeight: 800, color: "#fff", marginBottom: 26, opacity: fade(useCurrentFrame(), 4, 185) }}>And that's not all</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 18, justifyContent: "center", maxWidth: 900 }}>
+            {["Resident & Household Registry", "Blotter & KP Mediation", "Business Permits", "Announcements", "Barangay Assets", "Benefits Tracking"].map((t, i) => {
+              const f = useCurrentFrame();
+              return (
+                <div key={t} style={{ background: C.card, border: `1.5px solid ${C.primary}44`, borderRadius: 14, padding: "20px 28px", fontSize: 24, fontWeight: 600, color: "#e8f0ff", opacity: fade(f, 6 + i * 6, 190) }}>
+                  <span style={{ color: C.accent, marginRight: 10 }}>●</span>{t}
+                </div>
+              );
+            })}
+          </div>
+          <Audio src={staticFile("vo/t7_features.mp3")} />
+          <Caption t="Everything your barangay needs, one system" />
+        </Scene>
+      </Sequence>
+      {/* 8 — analytics mock (1560-1755) */}
+      <Sequence from={1560} durationInFrames={195}>
+        <Scene>
+          <div style={{ width: 860 }}>
+            <div style={{ fontSize: 28, color: C.muted, marginBottom: 16, opacity: fade(useCurrentFrame(), 4, 185) }}>For admins — live dashboards</div>
+            <div style={{ display: "flex", gap: 16, marginBottom: 18 }}>
+              {[["Residents", "1,248"], ["Households", "412"], ["Certs Issued", "96"]].map(([l, v], i) => {
+                const f = useCurrentFrame();
+                return (
+                  <Card key={l} w={270} style={{ padding: 18, opacity: fade(f, 6 + i * 5, 188) }}>
+                    <div style={{ fontSize: 17, color: C.muted }}>{l}</div>
+                    <div style={{ fontSize: 38, fontWeight: 900, color: C.primary }}>{v}</div>
+                  </Card>
+                );
+              })}
+            </div>
+            <div style={{ display: "flex", gap: 18 }}>
+              <Card w={480} style={{ padding: 18 }}>
+                <div style={{ fontSize: 16, color: C.muted, marginBottom: 10 }}>Issuance trend</div>
+                <div style={{ display: "flex", alignItems: "flex-end", gap: 10, height: 110 }}>
+                  {[40, 55, 48, 70, 62, 85, 78, 95].map((h, i) => {
+                    const f = useCurrentFrame();
+                    return <div key={i} style={{ flex: 1, background: `linear-gradient(180deg, ${C.primary}, ${C.primary}55)`, borderRadius: 4, height: h * fade(f, 8 + i * 3, 185) }} />;
+                  })}
+                </div>
+              </Card>
+              <Card w={360} style={{ padding: 18 }}>
+                <div style={{ fontSize: 16, color: C.muted, marginBottom: 10 }}>By barangay</div>
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: 110 }}>
+                  <div style={{ width: 100, height: 100, borderRadius: 50, background: `conic-gradient(${C.primary} 0 55%, ${C.accent} 55% 80%, ${C.warn} 80% 100%)`, opacity: fade(useCurrentFrame(), 14, 185) }}>
+                    <div style={{ width: 56, height: 56, borderRadius: 28, background: C.card, margin: 22 }} />
+                  </div>
+                </div>
+              </Card>
+            </div>
+          </div>
+          <Audio src={staticFile("vo/t8_analytics.mp3")} />
+          <Caption t="Live dashboards — per barangay or municipality-wide" />
+        </Scene>
+      </Sequence>
+      {/* 9 — closer (1755-1915) */}
+      <Sequence from={1755} durationInFrames={160}>
+        <Scene>
+          <div style={{ textAlign: "center" }}>
+            <div style={{ fontSize: 60, fontWeight: 900, color: "#fff", opacity: fade(useCurrentFrame(), 4, 150) }}>Your barangay, digital.</div>
+            <div style={{ fontSize: 36, fontWeight: 800, color: C.primary, marginTop: 14, opacity: fade(useCurrentFrame(), 20, 152) }}>trinly01.github.io/BIS</div>
+            <div style={{ fontSize: 24, color: C.muted, marginTop: 14, opacity: fade(useCurrentFrame(), 34, 155) }}>San Fabian, Pangasinan</div>
+          </div>
+          <Audio src={staticFile("vo/s6_outro.mp3")} />
         </Scene>
       </Sequence>
     </AbsoluteFill>

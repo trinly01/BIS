@@ -1,4 +1,4 @@
-import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig, Sequence } from "remotion";
+import { AbsoluteFill, Audio, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig, Sequence } from "remotion";
 
 const C = {
   bg: "#0c1424", card: "#16233f", primary: "#7cc4ff",
@@ -29,7 +29,8 @@ const Line: React.FC<{ t: string; size?: number; color?: string; delay?: number;
 export const BisAd: React.FC<{ vertical?: boolean }> = ({ vertical }) => {
   return (
     <AbsoluteFill>
-      {/* 0-70: the pain */}
+      <Audio src={staticFile("sfx/music.wav")} volume={0.12} />
+      {/* 0-200: the pain */}
       <Sequence from={0} durationInFrames={200}>
         <Scene center>
           <Line t="Pila sa barangay hall?" size={vertical ? 64 : 76} center delay={4} />
