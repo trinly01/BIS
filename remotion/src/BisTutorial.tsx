@@ -186,7 +186,24 @@ export const BisTutorial: React.FC = () => {
       <Sequence from={1150} durationInFrames={215}>
         <Scene>
           <Card w={560} style={{ textAlign: "center", ...pop((G - 1150), 4, 18) }}>
-            <div style={{ width: 120, height: 120, margin: "0 auto 16px", background: "#fff", borderRadius: 12, display: "grid", placeItems: "center", fontSize: 60 }}>▦</div>
+            <div style={{ width: 120, height: 120, margin: "0 auto 16px", background: "#fff", borderRadius: 12, padding: 10 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(11,1fr)", gap: 2, width: 100, height: 100 }}>
+                {(() => {
+                  // deterministic pseudo-QR: 11x11 modules + 3 finder squares
+                  const on = (x: number, y: number) => ((x * 7 + y * 13 + x * y) % 5) < 2;
+                  const finder = (x: number, y: number, cx: number, cy: number) => x >= cx && x < cx + 3 && y >= cy && y < cy + 3;
+                  const cells = [];
+                  for (let y = 0; y < 11; y++) for (let x = 0; x < 11; x++) {
+                    const inF = finder(x, y, 0, 0) || finder(x, y, 8, 0) || finder(x, y, 0, 8);
+                    const edge = finder(x, y, 0, 0) || finder(x, y, 8, 0) || finder(x, y, 0, 8);
+                    const corner = (x === 0 || x === 2 || y === 0 || y === 2 || (x >= 8 && (x === 8 || x === 10 || y === 0 || y === 2)) || (y >= 8 && (y === 8 || y === 10 || x === 0 || x === 2)));
+                    const black = inF ? (corner || (finder(x, y, 0, 0) && x === 1 && y === 1) || (finder(x, y, 8, 0) && x === 9 && y === 1) || (finder(x, y, 0, 8) && x === 1 && y === 9)) : on(x, y);
+                    cells.push(<div key={`${x}-${y}`} style={{ background: black ? "#0c1424" : "transparent", borderRadius: 1 }} />);
+                  }
+                  return cells;
+                })()}
+              </div>
+            </div>
             <div style={{ fontSize: 56, opacity: fade((G - 1150), 8, 70) }}>🛡️</div>
             <div style={{ fontSize: 30, fontWeight: 800, color: C.accent }}>Authentic document</div>
             <div style={{ fontSize: 20, color: C.muted, marginTop: 8 }}>Barangay Clearance · issued to Maria S. · valid until Feb 2027</div>
