@@ -204,7 +204,11 @@ aliases on `bis_residents` Records tab: `asset_borrowings`, `benefits_received`;
 new `bis_portal_benefits` (POST `{key: mobile}` → sanitized distributions list).
 New portal route `/benefits` (active programs + lookup by mobile) + home card.
 Dashboard: 4 new metric tiles (Assets Out, Benefits Distributed, Active
-Programs, Asset Items) + `bis_chart_benefit_types` donut panel — 20 panels total.
+Programs, Asset Items) + `bis_chart_benefit_types` donut panel + `Purok Boundaries`
+(`likhaChoropleth-panel` — new custom extension rendering `bis_puroks.boundary`
+MultiPolygons colored by `risk_level`) — 21 panels total. Puroks renamed to
+`Purok N - <name>` (Baybay, Centro, Dulong Bayan, Kasilagan, Magsaysay,
+Pag-asa, Riverside).
 
 **Gotcha fixed**: all `decimal` fields were `numeric(10,5)` — max ₱99,999.99.
 Budgets >100k failed with a misleading `VALUE_OUT_OF_RANGE` naming `barangay`.
