@@ -5,6 +5,12 @@ const pop = (f: number, s: number, dur = 14) => {
   const p = interpolate(f, [s, s + dur], [0, 1], { easing: Easing.back(1.8), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return { opacity: Math.min(1, p * 2), transform: `scale(${0.5 + p * 0.5})` };
 };
+// gentle idle float — keeps cards alive while VO plays
+const bob = (f: number, amp = 5, period = 45, phase = 0) =>
+  `translateY(${Math.sin((f + phase) * (Math.PI * 2) / period) * amp}px)`;
+// count-up for metric numbers
+const cnt = (f: number, s: number, target: number, dur = 25) =>
+  Math.round(target * interpolate(f, [s, s + dur], [0, 1], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
 
 // BIS portal theme — matches portal/src/index.css
 const C = { bg: "#0c1424", card: "#16233f", primary: "#7cc4ff", muted: "#9db4d8", accent: "#5ce6a0", warn: "#ffd166", border: "#24365c", input: "#1a2a4a" };
@@ -80,7 +86,7 @@ export const BisTutorial: React.FC = () => {
             <div style={{ textAlign: "center", fontSize: 20, color: C.muted, marginBottom: 28 }}>Municipality of San Fabian, Pangasinan</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
               {["Request a document", "Track a request", "Benefits & programs"].map((t, i) => (
-                <Card key={t} w={560} style={{ padding: 22, border: i === 0 ? `2px solid ${C.primary}` : `2px solid ${C.border}` }}>
+                <Card key={t} w={560} style={{ padding: 22, border: i === 0 ? `2px solid ${C.primary}` : `2px solid ${C.border}`, ...pop((G - 200), 8 + i * 7, 14), transform: `${pop((G - 200), 8 + i * 7, 14).transform} ${bob((G - 200), 4, 50, i * 14)}` }}>
                   <div style={{ fontSize: 26, fontWeight: 700, color: "#fff" }}>{t}</div>
                   <div style={{ fontSize: 18, color: C.muted, marginTop: 4 }}>{i === 0 ? "Clearance, indigency, residency & more" : i === 1 ? "Request number + mobile" : "Aid you've received"}</div>
                 </Card>
@@ -96,7 +102,7 @@ export const BisTutorial: React.FC = () => {
       {/* 2 — request form fills itself (140-230) */}
       <Sequence from={410} durationInFrames={165}>
         <Scene>
-          <Card w={640}>
+          <Card w={640} style={pop((G - 410), 4, 15)}>
             <div style={{ fontSize: 30, fontWeight: 800, color: "#fff", marginBottom: 18 }}>Request a document</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <Typed f0={10} text="Poblacion, San Fabian" ph="Select your barangay" />
@@ -115,7 +121,7 @@ export const BisTutorial: React.FC = () => {
       {/* 3 — success card (230-300) */}
       <Sequence from={575} durationInFrames={180}>
         <Scene>
-          <Card w={560} style={{ textAlign: "center" }}>
+          <Card w={560} style={{ textAlign: "center", ...pop((G - 575), 4, 18) }}>
             <div style={{ fontSize: 64, ...pop((G - 575), 4, 18) }}>✅</div>
             <div style={{ fontSize: 30, fontWeight: 800, color: "#fff", margin: "10px 0" }}>Request received</div>
             <div style={{ fontSize: 42, fontWeight: 900, color: C.primary, fontFamily: "monospace", margin: "10px 0" }}>DOC-POB-2026-0007</div>
@@ -129,7 +135,7 @@ export const BisTutorial: React.FC = () => {
       {/* 4 — track timeline (300-380) */}
       <Sequence from={755} durationInFrames={195}>
         <Scene>
-          <Card w={560}>
+          <Card w={560} style={pop((G - 755), 4, 15)}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
               <div style={{ fontSize: 26, fontWeight: 800, color: "#fff" }}>Barangay Clearance</div>
               <Badge color={C.warn}>For Signature</Badge>
@@ -157,7 +163,7 @@ export const BisTutorial: React.FC = () => {
         <Scene>
           <div style={{ width: 720 }}>
             <div style={{ fontSize: 26, color: C.muted, marginBottom: 14 }}>Staff Dashboard · Document Requests</div>
-            <Card w={720} style={{ padding: 0 }}>
+            <Card w={720} style={{ padding: 0, ...pop((G - 950), 4, 15) }}>
               {[["DOC-POB-2026-0007", "Maria Santos", "received"], ["DOC-POB-2026-0006", "Juan Dela Cruz", "released"], ["DOC-BIN-2026-0002", "Ana Aquino", "for_payment"]].map(([no, n, st], i) => (
                 <div key={no} style={{ display: "flex", alignItems: "center", gap: 16, padding: "16px 24px", borderBottom: i < 2 ? `1px solid ${C.border}` : "none", background: i === 0 ? `${C.primary}11` : "transparent" }}>
                   <span style={{ fontFamily: "monospace", fontSize: 20, color: C.primary }}>{no}</span>
@@ -179,7 +185,7 @@ export const BisTutorial: React.FC = () => {
       {/* 6 — QR verify (460-540) */}
       <Sequence from={1150} durationInFrames={215}>
         <Scene>
-          <Card w={560} style={{ textAlign: "center" }}>
+          <Card w={560} style={{ textAlign: "center", ...pop((G - 575), 4, 18) }}>
             <div style={{ width: 120, height: 120, margin: "0 auto 16px", background: "#fff", borderRadius: 12, display: "grid", placeItems: "center", fontSize: 60 }}>▦</div>
             <div style={{ fontSize: 56, opacity: fade((G - 1150), 8, 70) }}>🛡️</div>
             <div style={{ fontSize: 30, fontWeight: 800, color: C.accent }}>Authentic document</div>
