@@ -45,6 +45,7 @@ All collections: UUID PK, `accountability: all`, audit fields wired to `directus
 | `build_bis_phase3.py` | roles/policies, `PREFIX-YYYY-NNNN` serial flows, SLA `due_date` stamping |
 | `build_bis_portal.py` | 4 public webhook flows (options/request/track/verify) + `portal_mobile` field |
 | `build_bis_tenancy.py` | multi-barangay: `bis_barangays`, `barangay` M2O everywhere, per-barangay settings rows, code-embedded serials, scoped roles, `bis_admin` |
+| `build_bis_assets_benefits.py` | asset inventory + borrow ledger + benefit programs + distributions (Phase 6) |
 | `seed_smoke_test.py` | reference data + relational smoke test |
 | `seed_bis_data.py` | hand-crafted realistic data (officials roster, named households/residents) |
 | `seed_bis_demo.py` | procedural demo volume (~250 residents, 95 requests, count-guarded) |
@@ -183,6 +184,21 @@ Verified: portal → `DOC-POB-2026-0001`; staff API create → `DOC-POB-2026-000
 
 **Event-flow gotcha fixed**: `options.scope` takes event names
 (`items.create`), NOT collections — collections belong in `options.collections`.
+
+## Phase 6 — assets & benefits (`scripts/build_bis_assets_benefits.py`)
+
+| Collection | Folder | Purpose |
+|---|---|---|
+| `bis_assets` | master_data | Barangay property inventory (chairs, tents, generator, first-aid kits…): `asset_code, category, quantity, condition, location, status` + `borrowings` O2M |
+| `bis_asset_borrowings` | operations | Borrow ledger: `borrow_no (BOR-<CODE>-YYYY-NNNN), asset→assets, resident→residents, borrower_name, quantity, purpose, date_borrowed, expected_return, date_returned, status (borrowed/returned/overdue/lost)` |
+| `bis_benefit_programs` | master_data | Aid program catalog: `name, benefit_type (calamity_aid/free_medicines/free_vaccines/financial_assistance/food_packs/scholarship), funding_source, budget, dates, status` + `distributions` O2M |
+| `bis_benefit_distributions` | operations | Who received what: `distribution_no (BEN-<CODE>-YYYY-NNNN), program, resident, household, recipient_name, date_received, amount, quantity, item_details` |
+
+All barangay-scoped (`barangay` M2O, role filters, serials embed code). Reverse
+aliases on `bis_residents` Records tab: `asset_borrowings`, `benefits_received`;
+`bis_households.benefit_distributions`. Seed: 8 assets, 4 programs,
+8 borrowings, 20 distributions — verified `BOR-POB-2026-0007`,
+`BEN-BIN-2026-0003` (per-barangay counters).
 
 **Dashboard in multi-barangay mode**: metric tiles + `likhaHeatmap-panel` query
 under the *viewer's* permissions — barangay-scoped roles see only their own

@@ -12,7 +12,9 @@ BIS                       (group folder)
 │   ├── bis_settings      (per-barangay rows — no longer singleton)
 │   ├── bis_puroks
 │   ├── bis_officials
-│   └── bis_document_types
+│   ├── bis_document_types
+│   ├── bis_assets          (Phase 6)
+│   └── bis_benefit_programs(Phase 6)
 ├── bis_registry          (group folder)
 │   ├── bis_households
 │   └── bis_residents
@@ -24,7 +26,9 @@ BIS                       (group folder)
     ├── bis_kp_cases
     ├── bis_kp_hearings
     ├── bis_business_permits
-    └── bis_announcements
+    ├── bis_announcements
+    ├── bis_asset_borrowings      (Phase 6)
+    └── bis_benefit_distributions (Phase 6)
 ```
 
 **Multi-tenancy (Phase 5)**: every entity collection carries `barangay` M2O →
@@ -244,6 +248,33 @@ See `bis_barangays` + tenancy note above. Scoped perms
 (unfiltered). Dashboard: metric/heatmap panels auto-scope per viewer;
 echarts are municipal aggregates (added `bis_chart_requests_per_barangay`
 stacked bars + multi-line issuance trend per barangay).
+
+## Phase 6 — assets & benefits (`scripts/build_bis_assets_benefits.py`)
+
+### bis_assets
+`asset_code, name*, category (equipment/furniture/vehicle/facility/medical_supplies/
+sports/other), description, quantity, condition (good/fair/for_repair/retired),
+purchase_date, purchase_cost, location, status (available/fully_borrowed/for_repair/
+retired), barangay` · O2M out: `borrowings`.
+
+### bis_asset_borrowings
+`borrow_no (BOR-<CODE>-YYYY-NNNN), asset→bis_assets, resident→bis_residents,
+borrower_name (non-residents), quantity, purpose, date_borrowed*, expected_return,
+date_returned, status (borrowed/returned/overdue/lost), remarks, barangay`
+
+### bis_benefit_programs
+`name*, code, benefit_type (calamity_aid/free_medicines/free_vaccines/
+financial_assistance/food_packs/scholarship/other), description, funding_source,
+budget, start_date, end_date, status (upcoming/active/closed), barangay` · O2M out:
+`distributions`.
+
+### bis_benefit_distributions
+`distribution_no (BEN-<CODE>-YYYY-NNNN), program→bis_benefit_programs,
+resident→bis_residents, household→bis_households, recipient_name, date_received*,
+amount, quantity, item_details, remarks, barangay`
+
+Reverse aliases: `bis_residents.asset_borrowings`, `bis_residents.benefits_received`
+(Records tab), `bis_households.benefit_distributions`.
 
 ## Remaining
 SMS alerts (Semaphore); choropleth purok-boundary panel; real San Fabian
