@@ -11,7 +11,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { LINES } from "./vo-lines.mjs";
 
-const VOICE = "en-US-AndrewMultilingualNeural";
+const VOICE = "fil-PH-AngeloNeural";
 const RATE = "+8%";
 const OUT = join(dirname(fileURLToPath(import.meta.url)), "../public/vo");
 

@@ -30,7 +30,7 @@ export const BisAd: React.FC<{ vertical?: boolean }> = ({ vertical }) => {
   return (
     <AbsoluteFill>
       {/* 0-70: the pain */}
-      <Sequence durationInFrames={70}>
+      <Sequence from={0} durationInFrames={200}>
         <Scene center>
           <Line t="Pila sa barangay hall?" size={vertical ? 64 : 76} center delay={4} />
           <Line t="Balik-balik para sa clearance?" size={vertical ? 44 : 52} color={C.muted} center delay={18} />
@@ -38,7 +38,7 @@ export const BisAd: React.FC<{ vertical?: boolean }> = ({ vertical }) => {
         </Scene>
       </Sequence>
       {/* 70-130: what is BIS */}
-      <Sequence from={70} durationInFrames={60}>
+      <Sequence from={200} durationInFrames={195}>
         <Scene center>
           <Line t="BIS" size={vertical ? 110 : 120} color={C.primary} center delay={2} />
           <Line t="Barangay Information System" size={vertical ? 40 : 46} center delay={10} />
@@ -51,7 +51,7 @@ export const BisAd: React.FC<{ vertical?: boolean }> = ({ vertical }) => {
         { n: "2", t: "Track by mobile", d: "Check status anytime with your request number + mobile. No line, no guessing." },
         { n: "3", t: "Claim & verify", d: "Get your printed certificate — QR code proves it's authentic, anywhere." },
       ].map((s, i) => (
-        <Sequence key={s.n} from={130 + i * 40} durationInFrames={40}>
+        <Sequence key={s.n} from={395 + i * 210} durationInFrames={210}>
           <Scene>
             <div style={{ fontSize: 90, fontWeight: 900, color: C.accent, opacity: at(0, 0, 30) }}>{s.n}</div>
             <Line t={s.t} size={vertical ? 58 : 66} delay={6} />
@@ -59,8 +59,8 @@ export const BisAd: React.FC<{ vertical?: boolean }> = ({ vertical }) => {
           </Scene>
         </Sequence>
       ))}
-      {/* 250-300: closer */}
-      <Sequence from={250} durationInFrames={50}>
+      {/* 980-1140: closer */}
+      <Sequence from={980} durationInFrames={160}>
         <Scene center>
           <Line t="Your barangay, digital." size={vertical ? 52 : 60} center delay={4} />
           <Line t="trinly01.github.io/BIS" size={vertical ? 40 : 44} color={C.primary} center delay={16} />

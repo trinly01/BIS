@@ -54,7 +54,7 @@ export const BisTutorial: React.FC = () => {
   return (
     <AbsoluteFill>
       {/* 0 — intro: what is BIS (0-60) */}
-      <Sequence durationInFrames={60}>
+      <Sequence from={0} durationInFrames={200}>
         <Scene>
           <div style={{ textAlign: "center" }}>
             <div style={{ fontSize: 130, fontWeight: 900, color: C.primary, opacity: fade(useCurrentFrame(), 0, 50) }}>BIS</div>
@@ -65,7 +65,7 @@ export const BisTutorial: React.FC = () => {
         </Scene>
       </Sequence>
       {/* 1 — portal home, click Request (60-140) */}
-      <Sequence from={60} durationInFrames={80}>
+      <Sequence from={200} durationInFrames={210}>
         <Scene>
           <div style={{ opacity: 1 }}>
             <div style={{ textAlign: "center", fontSize: 44, fontWeight: 900, color: "#fff", marginBottom: 8 }}><span style={{ color: C.primary }}>BIS</span> Portal</div>
@@ -86,7 +86,7 @@ export const BisTutorial: React.FC = () => {
         </Scene>
       </Sequence>
       {/* 2 — request form fills itself (140-230) */}
-      <Sequence from={140} durationInFrames={90}>
+      <Sequence from={410} durationInFrames={165}>
         <Scene>
           <Card w={640}>
             <div style={{ fontSize: 30, fontWeight: 800, color: "#fff", marginBottom: 18 }}>Request a document</div>
@@ -105,7 +105,7 @@ export const BisTutorial: React.FC = () => {
         </Scene>
       </Sequence>
       {/* 3 — success card (230-300) */}
-      <Sequence from={230} durationInFrames={70}>
+      <Sequence from={575} durationInFrames={180}>
         <Scene>
           <Card w={560} style={{ textAlign: "center" }}>
             <div style={{ fontSize: 64, opacity: fade(useCurrentFrame(), 4, 60) }}>✅</div>
@@ -119,7 +119,7 @@ export const BisTutorial: React.FC = () => {
         </Scene>
       </Sequence>
       {/* 4 — track timeline (300-380) */}
-      <Sequence from={300} durationInFrames={80}>
+      <Sequence from={755} durationInFrames={195}>
         <Scene>
           <Card w={560}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
@@ -145,7 +145,7 @@ export const BisTutorial: React.FC = () => {
         </Scene>
       </Sequence>
       {/* 5 — staff side (380-460) */}
-      <Sequence from={380} durationInFrames={80}>
+      <Sequence from={950} durationInFrames={200}>
         <Scene>
           <div style={{ width: 720 }}>
             <div style={{ fontSize: 26, color: C.muted, marginBottom: 14 }}>Staff Dashboard · Document Requests</div>
@@ -169,7 +169,7 @@ export const BisTutorial: React.FC = () => {
         </Scene>
       </Sequence>
       {/* 6 — QR verify (460-540) */}
-      <Sequence from={460} durationInFrames={80}>
+      <Sequence from={1150} durationInFrames={215}>
         <Scene>
           <Card w={560} style={{ textAlign: "center" }}>
             <div style={{ width: 120, height: 120, margin: "0 auto 16px", background: "#fff", borderRadius: 12, display: "grid", placeItems: "center", fontSize: 60 }}>▦</div>
