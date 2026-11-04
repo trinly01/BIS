@@ -200,6 +200,15 @@ aliases on `bis_residents` Records tab: `asset_borrowings`, `benefits_received`;
 8 borrowings, 20 distributions — verified `BOR-POB-2026-0007`,
 `BEN-BIN-2026-0003` (per-barangay counters).
 
+**Portal additions**: `bis_portal_options` now also returns active `programs`;
+new `bis_portal_benefits` (POST `{key: mobile}` → sanitized distributions list).
+New portal route `/benefits` (active programs + lookup by mobile) + home card.
+
+**Gotcha fixed**: all `decimal` fields were `numeric(10,5)` — max ₱99,999.99.
+Budgets >100k failed with a misleading `VALUE_OUT_OF_RANGE` naming `barangay`.
+Widened every bis_* money column to `numeric(15,2)` (budget, amount,
+purchase_cost, fee, amount_paid).
+
 **Dashboard in multi-barangay mode**: metric tiles + `likhaHeatmap-panel` query
 under the *viewer's* permissions — barangay-scoped roles see only their own
 barangay; `bis_admin`/admin see municipal totals. ECharts panels run

@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom"
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { FileText, SearchCheck, QrCode, Landmark } from "lucide-react"
+import { FileText, SearchCheck, QrCode, Landmark, Gift } from "lucide-react"
 
 const LINKS = [
   { to: "/request", icon: FileText, title: "Request a document",
     desc: "Barangay clearance, indigency, residency, business permit support and more — submit online, claim at the hall." },
   { to: "/track", icon: SearchCheck, title: "Track a request",
     desc: "Check the status of a document request with your request number and mobile number." },
+  { to: "/benefits", icon: Gift, title: "Benefits & programs",
+    desc: "See active assistance programs and check the benefits you've received." },
 ]
 
 export default function HomePage() {

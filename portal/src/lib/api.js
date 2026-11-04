@@ -7,6 +7,7 @@ const OPTIONS_URL = `${BASE}/fb095790-b259-4c92-923c-e08d64d211fa`
 const REQUEST_URL = `${BASE}/a784fb2d-6d92-4601-b7e0-8e278ba8c7db`
 const TRACK_URL = `${BASE}/af009912-0030-49f1-abd8-aeb06c2aa6c7`
 const VERIFY_URL = `${BASE}/8baa0787-7fe2-4a3c-b2f4-f774ee3c767d`
+const BENEFITS_URL = `${BASE}/35ed1c6c-546a-4713-bace-38e86e9c12c1`
 
 async function post(url, body) {
   const res = await fetch(url, {
@@ -33,6 +34,11 @@ export async function submitRequest(payload) {
 export async function trackRequest(ref, key) {
   const data = await post(TRACK_URL, { ref, key })
   return data && data.found ? data.request : null
+}
+
+export async function lookupBenefits(mobile) {
+  const data = await post(BENEFITS_URL, { key: mobile })
+  return data || { found: false, benefits: [] }
 }
 
 export async function verifyDoc(serial) {
