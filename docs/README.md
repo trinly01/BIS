@@ -203,6 +203,8 @@ aliases on `bis_residents` Records tab: `asset_borrowings`, `benefits_received`;
 **Portal additions**: `bis_portal_options` now also returns active `programs`;
 new `bis_portal_benefits` (POST `{key: mobile}` → sanitized distributions list).
 New portal route `/benefits` (active programs + lookup by mobile) + home card.
+Dashboard: 4 new metric tiles (Assets Out, Benefits Distributed, Active
+Programs, Asset Items) + `bis_chart_benefit_types` donut panel — 20 panels total.
 
 **Gotcha fixed**: all `decimal` fields were `numeric(10,5)` — max ₱99,999.99.
 Budgets >100k failed with a misleading `VALUE_OUT_OF_RANGE` naming `barangay`.
