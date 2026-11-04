@@ -185,7 +185,7 @@ export const BisTutorial: React.FC = () => {
       {/* 6 — QR verify (460-540) */}
       <Sequence from={1150} durationInFrames={215}>
         <Scene>
-          <Card w={560} style={{ textAlign: "center", ...pop((G - 575), 4, 18) }}>
+          <Card w={560} style={{ textAlign: "center", ...pop((G - 1150), 4, 18) }}>
             <div style={{ width: 120, height: 120, margin: "0 auto 16px", background: "#fff", borderRadius: 12, display: "grid", placeItems: "center", fontSize: 60 }}>▦</div>
             <div style={{ fontSize: 56, opacity: fade((G - 1150), 8, 70) }}>🛡️</div>
             <div style={{ fontSize: 30, fontWeight: 800, color: C.accent }}>Authentic document</div>
@@ -220,12 +220,12 @@ export const BisTutorial: React.FC = () => {
           <div style={{ width: 860 }}>
             <div style={{ fontSize: 28, color: C.muted, marginBottom: 16, opacity: fade((G - 1705), 4, 185) }}>For admins — live dashboards</div>
             <div style={{ display: "flex", gap: 16, marginBottom: 18 }}>
-              {[["Residents", "1,248"], ["Households", "412"], ["Certs Issued", "96"]].map(([l, v], i) => {
+              {[["Residents", 1248], ["Households", 412], ["Certs Issued", 96]].map(([l, v], i) => {
                 const f = (G - 1705);
                 return (
-                  <Card key={l} w={270} style={{ padding: 18, ...pop(f, 6 + i * 5, 14) }}>
+                  <Card key={l} w={270} style={{ padding: 18, ...pop(f, 6 + i * 5, 14), transform: `${pop(f, 6 + i * 5, 14).transform} ${bob(f, 4, 55, i * 18)}` }}>
                     <div style={{ fontSize: 17, color: C.muted }}>{l}</div>
-                    <div style={{ fontSize: 38, fontWeight: 900, color: C.primary }}>{v}</div>
+                    <div style={{ fontSize: 38, fontWeight: 900, color: C.primary }}>{cnt(f, 8 + i * 5, Number(v)).toLocaleString()}</div>
                   </Card>
                 );
               })}
