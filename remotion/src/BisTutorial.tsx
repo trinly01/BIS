@@ -225,7 +225,7 @@ export const BisTutorial: React.FC = () => {
             {["Resident & Household Registry", "Blotter & KP Mediation", "Business Permits", "Announcements", "Barangay Assets", "Benefits Tracking"].map((t, i) => {
               const f = (G - 1365);
               return (
-                <div key={t} style={{ background: C.card, border: `1.5px solid ${C.primary}44`, borderRadius: 14, padding: "20px 28px", fontSize: 24, fontWeight: 600, color: "#e8f0ff", opacity: fade(f, 6 + i * 6, 190) }}>
+                <div key={t} style={{ background: C.card, border: `1.5px solid ${C.primary}44`, borderRadius: 14, padding: "20px 28px", fontSize: 24, fontWeight: 600, color: "#e8f0ff", ...pop(f, [65, 110, 150, 175, 220, 255][i], 16), transform: `${pop(f, [65, 110, 150, 175, 220, 255][i], 16).transform} rotate(${Math.sin(f * 0.15 + i) * 1.2}deg) ${bob(f, 5, 44, i * 17)}` }}>
                   <span style={{ color: C.accent, marginRight: 10 }}>●</span>{t}
                 </div>
               );
