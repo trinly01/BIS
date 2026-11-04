@@ -1,0 +1,20 @@
+{
+  "name": "bis-remotion",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "remotion studio --port=2433",
+    "build": "remotion bundle",
+    "render": "remotion render BisPromo out/bis-promo.mp4",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.350",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "4.0.350"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
